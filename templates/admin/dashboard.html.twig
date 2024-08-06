@@ -1,0 +1,13 @@
+{# templates/admin/dashboard.html.twig #}
+
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block content_title %}Dashboard{% endblock %}
+
+{% block main %}
+    {% include 'admin/stats/index.html.twig' %}
+{% endblock %}
+
+{% block body_javascript %}
+    {% include 'admin/stats/javascript.html.twig' %}
+{% endblock %}

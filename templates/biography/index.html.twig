@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Biographie{% endblock %}
+
+{% block bodyTitle %}
+    {% if biography is defined and biography is not null %}
+        {{ biography.title }}
+    {% else %}
+        Biographie
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {% if biography is defined and biography is not null %}
+        <div class="row" id="biography-{{ biography.id }}">
+            <div class="col px-4 py-2">
+                {{ biography.content|raw }}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if app.user and biography is defined and biography is not empty %}
+        {% if 'ROLE_ADMIN' in app.user.roles %}
+            <div class="row">
+                <div class="col px-4 py-2">
+                    {% set editUrl = ea_url()
+                        .setController('App\\Controller\\Admin\\BiographyCrudController')
+                        .setAction('edit')
+                        .setEntityId(biography.id) %}
+                    <a href="{{ editUrl }}" class="btn btn-warning">Editer</a>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

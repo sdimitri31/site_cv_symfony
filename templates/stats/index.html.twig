@@ -1,0 +1,212 @@
+{# templates/stats/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques{% endblock %}
+
+{% block bodyTitle %}Statistiques{% endblock %}
+
+{% block body %}
+    <div class="row">
+        {% set pageViewedTotal = pageViewedTotal is defined ? pageViewedTotal : null %}
+        {% set pageViewedToday = pageViewedToday is defined ? pageViewedToday : null %}
+        {% set pageViewedWeek = pageViewedWeek is defined ? pageViewedWeek : null %}
+        {% set pageViewedMonth = pageViewedMonth is defined ? pageViewedMonth : null %}
+
+        {% if pageViewedTotal is not null or pageViewedToday is not null or pageViewedWeek is not null or pageViewedMonth is not null %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Pages vues</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if pageViewedTotal is not null %}
+                            <p>Vues totales : <strong>{{ pageViewedTotal }}</strong></p>
+                        {% endif %}
+                        {% if pageViewedToday is not null %}
+                            <p>Vues aujourd'hui : <strong>{{ pageViewedToday }}</strong></p>
+                        {% endif %}
+                        {% if pageViewedWeek is not null %}
+                            <p>Vues les 7 derniers jours : <strong>{{ pageViewedWeek }}</strong></p>
+                        {% endif %}
+                        {% if pageViewedMonth is not null %}
+                            <p>Vues les 30 derniers jours : <strong>{{ pageViewedMonth }}</strong></p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% set visitorTotal = visitorTotal is defined ? visitorTotal : null %}
+        {% set visitorsToday = visitorsToday is defined ? visitorsToday : null %}
+        {% set visitorsWeek = visitorsWeek is defined ? visitorsWeek : null %}
+        {% set visitorsMonth = visitorsMonth is defined ? visitorsMonth : null %}
+
+        {% if visitorTotal is not null or visitorsToday is not null or visitorsWeek is not null or visitorsMonth is not null %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Visiteurs</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if visitorTotal is not null %}
+                            <p>Total visites : <strong>{{ visitorTotal }}</strong></p>
+                        {% endif %}
+                        {% if visitorsToday is not null %}
+                            <p>Visiteurs aujourd'hui : <strong>{{ visitorsToday }}</strong></p>
+                        {% endif %}
+                        {% if visitorsWeek is not null %}
+                            <p>Visiteurs des 7 derniers jours : <strong>{{ visitorsWeek }}</strong></p>
+                        {% endif %}
+                        {% if visitorsMonth is not null %}
+                            <p>Visiteurs des 30 derniers jours : <strong>{{ visitorsMonth }}</strong></p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% set viewsChartData = viewsChartData is defined ? viewsChartData : null %}
+        {% if viewsChartData is not null %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Graphique des vues</h2>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="viewsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% set visitorsChartData = visitorsChartData is defined ? visitorsChartData : null %}
+        {% if visitorsChartData is not null %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Graphique des visites</h2>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="visitsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% set topPages = topPages is defined ? topPages : null %}
+        {% if topPages is not null %}
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">URL stats</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Page URL</th>
+                                <th>Number of Visits</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for visit in topPages %}
+                                <tr>
+                                    <td>{{ visit.url }}</td>
+                                    <td>{{ visit.visitCount }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+{% block body_javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1.0.0"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('visitsChart').getContext('2d');
+            const visitsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {{ visitorsChartData|map(v => v.date)|json_encode|raw }},
+                    datasets: [{
+                        label: 'Visites',
+                        data: {{ visitorsChartData|map(v => v.count)|json_encode|raw }},
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                tooltipFormat: 'll'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Nombre de visites'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('viewsChart').getContext('2d');
+            const viewsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {{ viewsChartData|map(v => v.date)|json_encode|raw }},
+                    datasets: [{
+                        label: 'Vues',
+                        data: {{ viewsChartData|map(v => v.count)|json_encode|raw }},
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                tooltipFormat: 'll'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Nombre de vues'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

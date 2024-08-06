@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réalisations{% endblock %}
+
+{% block bodyTitle %}Réalisations{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col px-4 py-2">
+            <div class="row">
+                {% for project in projects %}
+                    {% if project.visible %}
+                        <div class="col-md-4 mb-4">
+                            <a href="{{ path('app_project_show', {'id': project.id}) }}" class="text-decoration-none">
+                                <div class="card h-100">
+                                    <img src="{{ asset( project_image_dir ~ project.id ~ '/' ~ project.image) }}" class="card-img-top" alt="Image de {{ project.title }}" />
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ project.title }}</h5>
+                                        <p class="card-text">{{ project.shortDescription }}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

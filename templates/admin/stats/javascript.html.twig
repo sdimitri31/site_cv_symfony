@@ -1,0 +1,85 @@
+{% block body_javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1.0.0"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('visitsChart').getContext('2d');
+            const visitsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {{ visitorsChartData|map(v => v.date)|json_encode|raw }},
+                    datasets: [{
+                        label: 'Visites',
+                        data: {{ visitorsChartData|map(v => v.count)|json_encode|raw }},
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                tooltipFormat: 'll'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Nombre de visites'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('viewsChart').getContext('2d');
+            const viewsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {{ viewsChartData|map(v => v.date)|json_encode|raw }},
+                    datasets: [{
+                        label: 'Vues',
+                        data: {{ viewsChartData|map(v => v.count)|json_encode|raw }},
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                tooltipFormat: 'll'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Nombre de vues'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

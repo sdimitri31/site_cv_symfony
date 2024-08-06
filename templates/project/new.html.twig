@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('vendor/trumbowyg/ui/trumbowyg.min.css') }}">
+{% endblock %}
+
+{% block title %}New Project{% endblock %}
+
+{% block bodyTitle %}New Project{% endblock %}
+
+{% block body %}
+
+    {{ include('project/_form.html.twig') }}
+
+    <a href="{{ path('app_project_index') }}">back to list</a>
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+    {% set targetField = form.longDescription.vars.id %}
+    {{ include('trumbowyg/import.html.twig') }}
+{% endblock %}

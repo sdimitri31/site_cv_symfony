@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Biography{% endblock %}
+
+{% block body %}
+    <h1>Create new Biography</h1>
+
+    {{ include('biography/_form.html.twig') }}
+
+    <a href="{{ path('app_biography_index') }}">back to list</a>
+{% endblock %}

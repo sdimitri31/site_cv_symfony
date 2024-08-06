@@ -1,0 +1,50 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ asset('vendor/trumbowyg/trumbowyg.min.js') }}"></script>
+<script src="{{ asset('vendor/trumbowyg/plugins/upload/trumbowyg.upload.min.js') }}"></script>
+<script src="{{ asset('vendor/trumbowyg/plugins/colors/trumbowyg.colors.min.js') }}"></script>
+<script src="//rawcdn.githack.com/RickStrahl/jquery-resizable/0.35/dist/jquery-resizable.min.js"></script>
+<script src="{{ asset('vendor/trumbowyg/plugins/resizimg/trumbowyg.resizimg.min.js') }}"></script>
+
+{% if targetField is defined %}
+    {% set uploadImagePath = uploadImagePath is defined ? uploadImagePath : 'upload_project_image' %}
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            $('#{{ targetField }}').trumbowyg({
+                btnsDef: {
+                    image: {
+                        dropdown: ['insertImage', 'upload'],
+                        ico: 'insertImage'
+                    },
+                    align: {
+                        dropdown: ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+                        ico: 'justifyLeft'
+                    }
+                },
+                btns: [
+                    ['viewHTML'],
+                    ['undo', 'redo'],
+                    ['formatting'],
+                    ['bold', 'italic', 'underline', 'strikethrough'],
+                    ['superscript', 'subscript'],
+                    ['removeformat'],
+                    ['link'],
+                    ['image'],
+                    ['align'],
+                    ['unorderedList', 'orderedList'],
+                    ['foreColor', 'backColor'],
+                    ['preformatted'],
+                    ['horizontalRule'],
+                    ['fullscreen']
+                ],
+                plugins: {
+                    upload: {
+                        serverPath: '{{ path(uploadImagePath) }}',
+                        fileFieldName: 'file',
+                        urlPropertyName: 'file'
+                    }
+                },
+                autogrow: true
+            });
+        });
+    </script>
+{% endif %}

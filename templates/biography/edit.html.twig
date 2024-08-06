@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('vendor/trumbowyg/ui/trumbowyg.min.css') }}">
+{% endblock %}
+
+{% block title %}Edit Biography{% endblock %}
+
+{% block bodyTitle %}Edit Biography{% endblock %}
+
+{% block body %}
+
+    {{ include('biography/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_biography_index') }}">back to list</a>
+
+    {{ include('biography/_delete_form.html.twig') }}
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+    {% set targetField = form.content.vars.id %}
+    {{ include('trumbowyg/import.html.twig') }}
+{% endblock %}

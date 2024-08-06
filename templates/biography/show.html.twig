@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Biography{% endblock %}
+
+{% block bodyTitle %}
+    {% if biography is defined and biography is not empty %}
+        {{ biography.title }}
+    {% else %}
+        Biographie
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col px-4 py-2">
+            {% if biography is defined and biography is not empty %}
+                {{ biography.content|raw }}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col px-4 py-2">
+            <a href="{{ path('app_biography_index') }}" class="btn btn-primary">Retour</a>
+            {% if app.user and biography is defined and biography is not empty %}
+                {% if 'ROLE_ADMIN' in app.user.roles %}
+                    {% set editUrl = ea_url()
+                        .setController('App\\Controller\\Admin\\BiographyCrudController')
+                        .setAction('edit')
+                        .setEntityId(biography.id) %}
+
+                    <a href="{{ editUrl }}" class="btn btn-warning">Editer</a>
+                    {{ include('biography/_delete_form.html.twig') }}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
