@@ -26,12 +26,4 @@
         </div>
         {% endfor %}
     </div>
-    {% if app.user %}
-        {% if 'ROLE_ADMIN' in app.user.roles %}
-            {% set newUrl = ea_url()
-                .setController('App\\Controller\\Admin\\ContactCrudController')
-                .setAction('new') %}
-            <a href="{{ newUrl }}">Create new</a>
-        {% endif %}
-    {% endif %}
 {% endblock %}
