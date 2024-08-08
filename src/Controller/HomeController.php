@@ -16,7 +16,7 @@ class HomeController extends AbstractController
     {
         $biography = null;
         $biographyId = $settingsManager->getSetting('homepage_biography_id_displayed', -1);
-        if($biographyId > 0){
+        if ($biographyId > 0) {
             $biography = $biographyRepository->findOneBy(['id' => $biographyId], ['updatedAt' => 'DESC']);
         }
         $latestProjects = $projectRepository->findBy(['isVisible' => '1'], ['updatedAt' => 'DESC'], $settingsManager->getSetting('homepage_number_of_project_displayed', 3));
