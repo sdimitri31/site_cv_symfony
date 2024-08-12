@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+
 #[Route('/project')]
 class ProjectController extends AbstractController
 {
@@ -45,9 +46,23 @@ class ProjectController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_project_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_project_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(Project $project): Response
     {
+        return $this->render('project/show.html.twig', [
+            'project' => $project,
+        ]);
+    }
+
+    #[Route('/{slug}', name: 'app_project_show_slug', requirements: ['slug' => '[a-zA-Z0-9\-]+'], methods: ['GET'])]
+    public function showBySlug(ProjectRepository $projectRepository, string $slug): Response
+    {
+        $project = $projectRepository->findOneBy(['slug' => $slug]);
+
+        if (!$project) {
+            throw $this->createNotFoundException('Projet non trouvé');
+        }
+
         return $this->render('project/show.html.twig', [
             'project' => $project,
         ]);

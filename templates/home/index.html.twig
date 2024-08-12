@@ -28,7 +28,7 @@
                 {% for project in latest_projects %}
                     {% if project.visible %}
                         <div class="col-md-4 mb-4" id="project-{{ project.id }}">
-                            <a href="{{ path('app_project_show', {'id': project.id}) }}" class="text-decoration-none">
+                            <a href="{{ path('app_project_show_slug', {'slug': project.slug}) }}" class="text-decoration-none">
                                 <div class="card h-100">
                                     <img src="{{ asset( project_image_dir ~ project.id ~ '/' ~ project.image) }}"
                                          class="card-img-top" alt="Image de {{ project.title }}"/>
