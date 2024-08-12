@@ -2,6 +2,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Project;
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -56,6 +57,7 @@ class ProjectCrudController extends AbstractCrudController
 
         return [
             IdField::new('id')->onlyOnIndex(),
+            TextField::new('slug')->onlyOnIndex(),
             TextField::new('title'),
             TextField::new('shortDescription'),
             TextEditorField::new('longDescription'),
@@ -77,6 +79,21 @@ class ProjectCrudController extends AbstractCrudController
             }
         }
 
+        $this->generateSlug($entityInstance);
+
         parent::updateEntity($entityManager, $entityInstance);
+    }
+
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $this->generateSlug($entityInstance);
+        parent::persistEntity($entityManager, $entityInstance);
+    }
+
+    private function generateSlug(Project $project): void
+    {
+        $slugify = new Slugify();
+        $slug = $slugify->slugify($project->getTitle());
+        $project->setSlug($slug);
     }
 }
