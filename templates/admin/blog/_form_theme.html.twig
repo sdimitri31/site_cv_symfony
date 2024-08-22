@@ -1,0 +1,4 @@
+{% block _Blog_content_widget %}
+    {% set targetField = 'trumbowygContent' %}
+    <textarea id="{{ targetField }}" name="{{ field_name(form) }}" required="required" class="form-control">{{ field_value(form) }}</textarea>
+{% endblock %}

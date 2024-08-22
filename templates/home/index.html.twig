@@ -17,31 +17,70 @@
         </div>
     {% endif %}
 
-    <div class="row shadow mt-4 bg-body-tertiary mb-4">
+    <div class="row shadow mt-4 bg-body-tertiary mb-2">
+        <div class="col px-4 py-2">
+            <h2>Dernières actualités</h2>
+        </div>
+    </div>
+    <div class="container my-4">
+        <div class="row">
+            {% for blog in latestBlogs %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card card-link shadow h-100">
+                        <a href="{{ path('app_blog_show_slug', {'slug': blog.slug}) }}"
+                           class="text-decoration-none">
+                            <img src="{{ asset( blog_image_dir ~ blog.id ~ '/' ~ blog.image) }}"
+                                 class="card-img-top"
+                                 alt="{{ blog.title }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ blog.title }}</h5>
+                                <p class="card-text text-muted">{{ blog.shortDescription }}</p>
+                            </div>
+                        </a>
+                        <div class="card-footer bg-transparent border-0">
+                            <div class="d-flex flex-wrap">
+                                {% for tag in blog.tags %}
+                                    <a class="badge me-1 mb-1 tag-link"
+                                       href="{{ path('app_blog_search_tag', {'tag': tag}) }}">{{ tag }}</a>
+                                {% endfor %}
+                            </div>
+                            <small class="text-muted">
+                                Publié le {{ blog.createdAt|format_datetime('long', 'none') }}
+                                {% if blog.updatedAt > blog.createdAt %}
+                                    • Mis à jour le {{ blog.updatedAt|format_datetime('long', 'none') }}
+                                {% endif %}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="row shadow mt-4 bg-body-tertiary mb-2">
         <div class="col px-4 py-2">
             <h2>Dernières réalisations</h2>
         </div>
     </div>
-    <div class="row">
-        <div class="col px-4 py-2">
-            <div class="row">
-                {% for project in latest_projects %}
-                    {% if project.visible %}
-                        <div class="col-md-4 mb-4" id="project-{{ project.id }}">
-                            <a href="{{ path('app_project_show_slug', {'slug': project.slug}) }}" class="text-decoration-none">
-                                <div class="card h-100">
-                                    <img src="{{ asset( project_image_dir ~ project.id ~ '/' ~ project.image) }}"
-                                         class="card-img-top" alt="Image de {{ project.title }}"/>
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ project.title }}</h5>
-                                        <p class="card-text">{{ project.shortDescription }}</p>
-                                    </div>
+    <div class="container my-4">
+        <div class="row">
+            {% for project in latestProjects %}
+                {% if project.visible %}
+                    <div class="col-md-4 mb-4" id="project-{{ project.id }}">
+                        <a href="{{ path('app_project_show_slug', {'slug': project.slug}) }}"
+                           class="text-decoration-none">
+                            <div class="card card-link shadow h-100">
+                                <img src="{{ asset( project_image_dir ~ project.id ~ '/' ~ project.image) }}"
+                                     class="card-img-top" alt="Image de {{ project.title }}"/>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ project.title }}</h5>
+                                    <p class="card-text">{{ project.shortDescription }}</p>
                                 </div>
-                            </a>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

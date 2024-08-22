@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog{% endblock %}
+
+{% block bodyTitle %}Blog{% endblock %}
+
+{% block body %}
+    <div class="container my-4">
+        <div class="row">
+            {% for blog in pagination %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card card-link shadow h-100">
+                            <a href="{{ path('app_blog_show_slug', {'slug': blog.slug}) }}"
+                               class="text-decoration-none">
+                                <img src="{{ asset( blog_image_dir ~ blog.id ~ '/' ~ blog.image) }}"
+                                     class="card-img-top"
+                                     alt="{{ blog.title }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ blog.title }}</h5>
+                                    <p class="card-text text-muted">{{ blog.shortDescription }}</p>
+                                </div>
+                            </a>
+                            <div class="card-footer bg-transparent border-0">
+                                <div class="d-flex flex-wrap">
+                                    {% for tag in blog.tags %}
+                                        <a class="badge me-1 mb-1 tag-link"
+                                           href="{{ path('app_blog_search_tag', {'tag': tag}) }}">{{ tag }}</a>
+                                    {% endfor %}
+                                </div>
+                                <small class="text-muted">
+                                    Publié le {{ blog.createdAt|format_datetime('long', 'none') }}
+                                    {% if blog.updatedAt > blog.createdAt %}
+                                        • Mis à jour le {{ blog.updatedAt|format_datetime('long', 'none') }}
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+            {% endfor %}
+        </div>
+        <div class="pagination">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </div>
+{% endblock %}

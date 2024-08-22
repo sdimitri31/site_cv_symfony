@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Visit;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -44,9 +45,15 @@ class VisitLogger implements EventSubscriberInterface
         $visit->setIp($request->getClientIp());
         $visit->setUrl($visitedURL);
         $visit->setMethod($request->getMethod());
-        $visit->setVisitedAt(new \DateTimeImmutable());
         $visit->setVisitedBy($this->getUserId());
         $visit->setUserAgent($useragent);
+
+        try{
+            $visit->setVisitedAt(new \DateTimeImmutable('now', new DateTimeZone('Europe/Paris')));
+        }
+        catch(\Exception $e){
+            $visit->setVisitedAt(new \DateTimeImmutable());
+        }
 
         // Persist visit
         $this->entityManager->persist($visit);

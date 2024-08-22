@@ -16,7 +16,6 @@ class ContactCrudController extends AbstractCrudController
         return Contact::class;
     }
 
-
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -25,12 +24,6 @@ class ContactCrudController extends AbstractCrudController
             TextField::new('link'),
             TextField::new('image'),
         ];
-
-
-//        ImageField::new('image')
-//            ->setBasePath('uploads/images/contact/')
-//            ->setUploadDir('public/uploads/images/contact/')
-//            ->setUploadedFileNamePattern('[slug]-[contenthash].[extension]'),
     }
 
 }

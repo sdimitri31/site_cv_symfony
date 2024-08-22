@@ -113,15 +113,15 @@ body {
 }
 
 .card {
-    box-shadow: 7px 7px 6px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s;
 }
 
-a .card {
+.card-link {
     border-color: rgba(13, 110, 253, 0.5);
 }
 
-a:hover .card {
+.card-link:hover {
+    border-color: rgba(13, 110, 253, 0.5);
     transform: translateY(-10px);
 }
 
@@ -141,6 +141,7 @@ a:hover .card {
 .card-title {
     font-size: 1.25rem;
     font-weight: bold;
+    color: var(--bs-body-color);
 }
 
 .card-text {
@@ -179,4 +180,15 @@ body[data-bs-theme="dark"] .bg-body-tertiary {
 
 .font-size-xs{
     font-size: x-small;
+}
+
+.tag-link {
+    color: white;
+    cursor: pointer;
+    background-color: var(--primary-rgb);
+    transition: background-color 0.3s;
+}
+
+.tag-link:hover {
+    background-color: var(--navbar-bg-color-hover);
 }

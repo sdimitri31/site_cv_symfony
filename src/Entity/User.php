@@ -40,10 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string',length: 255, unique: true)]
     private ?string $username = null;
 
-    /**
-     * @var string|null
-     */
-    private $plainPassword;
+    private ?string $plainPassword;
 
     public function getId(): ?int
     {

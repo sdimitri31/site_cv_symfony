@@ -13,9 +13,8 @@ class ImageService
         $this->projectDir = $params->get('kernel.project_dir');
     }
 
-    public function handleImageUpload(string $content, string $tempDir, string $newDir): string
+    public function handleContentImageUpload(string $content, string $tempDir, string $newDir): string
     {
-        $absoluteTempDir = $this->projectDir . '/public' . $tempDir;
         $absoluteDir = $this->projectDir . '/public' . $newDir;
 
         // Create directory
@@ -23,7 +22,7 @@ class ImageService
             mkdir($absoluteDir, 0777, true);
         }
 
-        // Déplacer les fichiers d'images du répertoire temporaire vers le répertoire de destination
+        // Move files from tempDir to newDir
         $pattern = '/<img[^>]+src="([^"]+)"[^>]*>/i';
         preg_match_all($pattern, $content, $matches);
         foreach ($matches[1] as $src) {
@@ -33,7 +32,7 @@ class ImageService
             }
         }
 
-        // Mettre à jour les chemins des images dans le contenu
+        // Update img src to match new path
         $updatedContent = self::updateImagePathsInHtml($content, $tempDir, $newDir);
         return $updatedContent;
     }

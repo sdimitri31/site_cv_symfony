@@ -15,10 +15,12 @@ class ImageUploadController extends AbstractController
 {
     public const projectDir = '/uploads/images/project/';
     public const projectTempDir = '/uploads/images/project/temp/';
+    public const blogDir = '/uploads/images/blog/';
+    public const blogTempDir = '/uploads/images/blog/temp/';
     public const biographyDir = '/uploads/images/biography/';
     public const biographyTempDir = '/uploads/images/biography/temp/';
 
-    public function uploadImage(Request $request, string $path)
+    public function uploadImage(Request $request, string $path): JsonResponse
     {
         $file = $request->files->get('file');
 
@@ -39,13 +41,19 @@ class ImageUploadController extends AbstractController
     }
 
     #[Route('/project/image', name: 'upload_project_image', methods: ['POST'])]
-    public function uploadProjectImage(Request $request)
+    public function uploadProjectImage(Request $request): JsonResponse
     {
         return $this->uploadImage($request, ImageUploadController::projectTempDir);
     }
 
+    #[Route('/blog/image', name: 'upload_blog_image', methods: ['POST'])]
+    public function uploadBlogImage(Request $request): JsonResponse
+    {
+        return $this->uploadImage($request, ImageUploadController::blogTempDir);
+    }
+
     #[Route('/biography/image', name: 'upload_biography_image', methods: ['POST'])]
-    public function uploadBiographyImage(Request $request)
+    public function uploadBiographyImage(Request $request): JsonResponse
     {
         return $this->uploadImage($request, ImageUploadController::biographyTempDir);
     }

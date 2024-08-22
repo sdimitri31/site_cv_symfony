@@ -4,7 +4,6 @@ namespace App\EventListener;
 
 use App\Controller\ImageUploadController;
 use App\Entity\Biography;
-use App\Entity\Project;
 use App\Service\ImageService;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
@@ -43,9 +42,6 @@ class EasyAdminListener implements EventSubscriberInterface
         if ($entity instanceof Biography) {
             $this->handleBiographyEvent($entity);
         }
-        elseif ($entity instanceof Project) {
-            $this->handleProjectEvent($entity);
-        }
     }
 
     public function onAfterEntityUpdated(AfterEntityUpdatedEvent $event): void
@@ -54,9 +50,6 @@ class EasyAdminListener implements EventSubscriberInterface
 
         if ($entity instanceof Biography) {
             $this->handleBiographyEvent($entity);
-        }
-        elseif ($entity instanceof Project) {
-            $this->handleProjectEvent($entity);
         }
     }
 
@@ -67,26 +60,10 @@ class EasyAdminListener implements EventSubscriberInterface
         $biographyTempDir = ImageUploadController::biographyTempDir;
         $biographyDir = ImageUploadController::biographyDir . $id . '/';
 
-        $updatedContent = $this->imageService->handleImageUpload($content, $biographyTempDir, $biographyDir);
+        $updatedContent = $this->imageService->handleContentImageUpload($content, $biographyTempDir, $biographyDir);
 
         if ($updatedContent !== $content) {
             $biography->setContent($updatedContent);
-            $this->entityManager->flush();
-        }
-    }
-
-    private function handleProjectEvent(Project $project): void
-    {
-        $content = $project->getLongDescription();
-        $id = $project->getId();
-        $tempDir = ImageUploadController::projectTempDir;
-        $newDir = ImageUploadController::projectDir . $id . '/';
-
-        $updatedContent = $this->imageService->handleImageUpload($content, $tempDir, $newDir);
-        $this->imageService->moveFile($project->getImage(), $tempDir, $newDir);
-
-        if ($updatedContent !== $content) {
-            $project->setLongDescription($updatedContent);
             $this->entityManager->flush();
         }
     }

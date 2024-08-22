@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\ProjectRepository;
+use App\Repository\BlogRepository;
 use DateTimeZone;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProjectRepository::class)]
-class Project
+#[ORM\Entity(repositoryClass: BlogRepository::class)]
+class Blog
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,16 +22,13 @@ class Project
     private ?string $shortDescription = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $longDescription = null;
+    private ?string $content = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
-
-    #[ORM\Column]
-    private ?int $position = null;
 
     #[ORM\Column]
     private ?bool $isVisible = null;
@@ -41,6 +38,9 @@ class Project
 
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
+
+    #[ORM\Column(type: Types::JSON)]
+    private array $tags = [];
 
     /**
      * @var string|null Store new image upload in form before processing and storing in DB
@@ -89,14 +89,14 @@ class Project
         return $this;
     }
 
-    public function getLongDescription(): ?string
+    public function getContent(): ?string
     {
-        return $this->longDescription;
+        return $this->content;
     }
 
-    public function setLongDescription(string $longDescription): static
+    public function setContent(string $content): static
     {
-        $this->longDescription = $longDescription;
+        $this->content = $content;
 
         return $this;
     }
@@ -121,18 +121,6 @@ class Project
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    public function getPosition(): ?int
-    {
-        return $this->position;
-    }
-
-    public function setPosition(int $position): static
-    {
-        $this->position = $position;
 
         return $this;
     }
@@ -169,6 +157,18 @@ class Project
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getTags(): array
+    {
+        return array_unique($this->tags);
+    }
+
+    public function setTags(array $tags): static
+    {
+        $this->tags = $tags;
 
         return $this;
     }

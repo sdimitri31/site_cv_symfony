@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Biography;
+use App\Entity\Blog;
 use App\Entity\Contact;
 use App\Entity\Project;
 use App\Entity\Setting;
@@ -95,6 +96,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToRoute('Main site', 'fa fa-home', 'app_home');
         yield MenuItem::linkToCrud('Biography', 'fa fa-male', Biography::class);
+        yield MenuItem::linkToCrud('Blog', 'fa fa-blog', Blog::class);
         yield MenuItem::linkToCrud('Project', 'fa fa-briefcase', Project::class);
         yield MenuItem::linkToCrud('Contact', 'fa fa-envelope', Contact::class);
         yield MenuItem::linkToCrud('Users', 'fa fa-users', User::class);
